@@ -1,0 +1,5 @@
+blank_issues_enabled: true
+contact_links:
+  - name: Ledger (the database tool)
+    url: https://github.com/ClearanceClarence-Software/Ledger/issues
+    about: Problems inside Ledger itself, not with how AMPLE installs or opens it.

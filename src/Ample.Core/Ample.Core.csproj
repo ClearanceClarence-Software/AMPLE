@@ -1,0 +1,14 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <!-- Everything that knows the stack: layout, manifest, installer, services, projects. No UI. -->
+  <PropertyGroup>
+    <RootNamespace>Ample</RootNamespace>
+    <AssemblyName>Ample.Core</AssemblyName>
+  </PropertyGroup>
+
+  <!-- Config templates rendered into etc\ on install; read through ConfigTemplates. -->
+  <ItemGroup>
+    <EmbeddedResource Include="Templates\**" LogicalName="Templates/%(RecursiveDir)%(Filename)%(Extension)" />
+  </ItemGroup>
+
+</Project>

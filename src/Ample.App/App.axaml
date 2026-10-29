@@ -1,0 +1,33 @@
+<Application xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="using:Ample.App.ViewModels"
+             xmlns:views="using:Ample.App.Views"
+             x:Class="Ample.App.App"
+             RequestedThemeVariant="Default">
+    <Application.Styles>
+        <FluentTheme />
+        <StyleInclude Source="avares://AMPLE/Styles/Theme.axaml" />
+    </Application.Styles>
+
+    <!-- Each page view model renders as its view inside the shell's content area. -->
+    <Application.DataTemplates>
+        <DataTemplate DataType="vm:OverviewViewModel">
+            <views:OverviewView />
+        </DataTemplate>
+        <DataTemplate DataType="vm:ProjectsViewModel">
+            <views:ProjectsView />
+        </DataTemplate>
+        <DataTemplate DataType="vm:VersionsViewModel">
+            <views:VersionsView />
+        </DataTemplate>
+        <DataTemplate DataType="vm:LogViewModel">
+            <views:LogView />
+        </DataTemplate>
+        <DataTemplate DataType="vm:SettingsViewModel">
+            <views:SettingsView />
+        </DataTemplate>
+        <DataTemplate DataType="vm:SetupViewModel">
+            <views:SetupView />
+        </DataTemplate>
+    </Application.DataTemplates>
+</Application>

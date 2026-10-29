@@ -1,0 +1,92 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="using:Ample.App.ViewModels"
+             x:Class="Ample.App.Views.ProjectsView"
+             x:DataType="vm:ProjectsViewModel">
+
+    <StackPanel Spacing="20">
+        <Grid ColumnDefinitions="*,Auto">
+            <StackPanel Spacing="4">
+                <TextBlock Classes="h1" Text="Projects" />
+                <TextBlock Classes="muted" TextWrapping="Wrap"
+                           Text="Every project gets its own address, HTTPS, PHP version and, if you want, its own php.ini. Nothing changes until you apply." />
+            </StackPanel>
+            <StackPanel Grid.Column="1" Orientation="Horizontal" Spacing="8" VerticalAlignment="Bottom">
+                <Button Content="Add folder…" Click="AddFolder_Click" />
+                <Button Content="New project" Command="{Binding AddCommand}" />
+            </StackPanel>
+        </Grid>
+
+        <Border Classes="card" IsVisible="{Binding IsEmpty}">
+            <StackPanel Spacing="8">
+                <TextBlock Classes="h3" Text="No projects yet" />
+                <TextBlock Classes="muted" TextWrapping="Wrap"
+                           Text="Add a folder you already work in, or create a new project. AMPLE writes the virtual host, points the .test name at this computer and issues the HTTPS certificate." />
+                <TextBlock Classes="mono muted" Text="{Binding ProjectsFolder}" />
+            </StackPanel>
+        </Border>
+
+        <ItemsControl ItemsSource="{Binding Rows}">
+            <ItemsControl.ItemTemplate>
+                <DataTemplate x:DataType="vm:ProjectRowViewModel">
+                    <Border Classes="card" Margin="0,0,0,12">
+                        <Grid ColumnDefinitions="*,*" RowDefinitions="Auto,Auto,Auto" ColumnSpacing="16" RowSpacing="12">
+                            <StackPanel Grid.Row="0" Grid.Column="0">
+                                <TextBlock Classes="label" Text="Name" />
+                                <TextBox Text="{Binding Name}" />
+                            </StackPanel>
+                            <StackPanel Grid.Row="0" Grid.Column="1">
+                                <TextBlock Classes="label" Text="Address" />
+                                <TextBox Classes="mono" Text="{Binding Host}" Watermark="myproject.test" />
+                            </StackPanel>
+                            <StackPanel Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2">
+                                <TextBlock Classes="label" Text="Folder" />
+                                <Grid ColumnDefinitions="*,Auto" ColumnSpacing="8">
+                                    <TextBox Classes="mono" Text="{Binding Folder}" />
+                                    <Button Grid.Column="1" Content="Browse…" Click="BrowseFolder_Click" />
+                                </Grid>
+                            </StackPanel>
+                            <Grid Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" ColumnDefinitions="Auto,Auto,*,Auto,Auto" ColumnSpacing="16">
+                                <StackPanel Grid.Column="0" Orientation="Horizontal" Spacing="10">
+                                    <TextBlock Text="PHP" VerticalAlignment="Center" FontWeight="SemiBold" />
+                                    <ComboBox ItemsSource="{Binding PhpChoices}" SelectedItem="{Binding PhpVersion}" MinWidth="130" />
+                                </StackPanel>
+                                <CheckBox Grid.Column="1" Content="HTTPS" IsChecked="{Binding UseHttps}" />
+                                <StackPanel Grid.Column="2" Orientation="Horizontal" Spacing="4" VerticalAlignment="Center" Margin="8,0,0,0">
+                                    <TextBlock Classes="muted" Text="{Binding IniLabel}" VerticalAlignment="Center" Margin="0,0,6,0" />
+                                    <Button Classes="ghost" Content="Custom php.ini" Command="{Binding CreateIniCommand}" IsVisible="{Binding !HasCustomIni}" />
+                                    <Button Classes="ghost" Content="Edit" Command="{Binding EditIniCommand}" IsVisible="{Binding HasCustomIni}" />
+                                    <Button Classes="ghost" Content="Use version's" Command="{Binding ClearIniCommand}" IsVisible="{Binding HasCustomIni}" />
+                                </StackPanel>
+                                <Button Grid.Column="3" Classes="ghost" Content="Open folder" Command="{Binding OpenFolderCommand}" />
+                                <Button Grid.Column="4" Classes="ghost" Click="Remove_Click" ToolTip.Tip="Remove this project">
+                                    <StackPanel Orientation="Horizontal" Spacing="8">
+                                        <Path Classes="icon" Width="16" Height="16" Data="{StaticResource IconTrash}"
+                                              Stroke="{DynamicResource ErrorBrush}" />
+                                        <TextBlock Text="Remove" Foreground="{DynamicResource ErrorBrush}" />
+                                    </StackPanel>
+                                </Button>
+                            </Grid>
+                        </Grid>
+                    </Border>
+                </DataTemplate>
+            </ItemsControl.ItemTemplate>
+        </ItemsControl>
+
+        <Border Classes="card">
+            <Grid ColumnDefinitions="*,Auto,Auto" ColumnSpacing="8">
+                <TextBlock Classes="muted" Text="{Binding Status}" TextWrapping="Wrap" VerticalAlignment="Center" />
+                <Button Grid.Column="1" Content="Revert" Command="{Binding RevertCommand}" />
+                <Button Grid.Column="2" Classes="primary" Content="Apply" Command="{Binding ApplyCommand}" MinWidth="120" />
+            </Grid>
+        </Border>
+
+        <Border Classes="info">
+            <Grid ColumnDefinitions="*,Auto" ColumnSpacing="12">
+                <TextBlock Classes="soft" TextWrapping="Wrap" VerticalAlignment="Center"
+                           Text="Apply asks for admin rights once to add the names to the hosts file, and Windows asks once to trust AMPLE's local certificate." />
+                <Button Grid.Column="1" Content="Trust certificate" Command="{Binding TrustCertificateCommand}" />
+            </Grid>
+        </Border>
+    </StackPanel>
+</UserControl>

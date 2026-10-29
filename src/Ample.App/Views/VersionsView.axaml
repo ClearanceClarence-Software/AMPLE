@@ -1,0 +1,63 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="using:Ample.App.ViewModels"
+             x:Class="Ample.App.Views.VersionsView"
+             x:DataType="vm:VersionsViewModel">
+
+    <UserControl.Resources>
+        <DataTemplate x:Key="VersionRow" x:DataType="vm:VersionRowViewModel">
+            <Border BorderBrush="{DynamicResource LineBrush}" BorderThickness="0,1,0,0" Padding="0,12">
+                <Grid ColumnDefinitions="*,Auto" ColumnSpacing="16">
+                    <StackPanel Spacing="3">
+                        <StackPanel Orientation="Horizontal" Spacing="10">
+                            <TextBlock FontWeight="SemiBold" FontSize="15" Text="{Binding Title}" VerticalAlignment="Center" />
+                            <Border Classes="pill" Classes.running="{Binding BadgeIsCurrent}">
+                                <TextBlock Text="{Binding Badge}" />
+                            </Border>
+                        </StackPanel>
+                        <TextBlock Classes="muted" FontSize="13" Text="{Binding Detail}" TextWrapping="Wrap" />
+                    </StackPanel>
+                    <StackPanel Grid.Column="1" Orientation="Horizontal" Spacing="6" VerticalAlignment="Center">
+                        <Button Classes="ghost" Content="phpinfo" Command="{Binding PhpInfoCommand}" IsVisible="{Binding IsPhp}" />
+                        <Button Classes="ghost" Content="php.ini" Command="{Binding EditIniCommand}" IsVisible="{Binding IsPhp}" />
+                        <Button Content="{Binding MakeCurrentLabel}" Command="{Binding MakeCurrentCommand}" IsVisible="{Binding IsInstalled}" />
+                        <Button Classes="ghost" Content="Remove" Command="{Binding RemoveCommand}" IsVisible="{Binding IsInstalled}" />
+                        <Button Classes="primary" Content="Install" Command="{Binding InstallCommand}" IsVisible="{Binding !IsInstalled}" />
+                    </StackPanel>
+                </Grid>
+            </Border>
+        </DataTemplate>
+    </UserControl.Resources>
+
+    <StackPanel Spacing="20">
+        <Grid ColumnDefinitions="*,Auto">
+            <StackPanel Spacing="4">
+                <TextBlock Classes="h1" Text="Versions" />
+                <TextBlock Classes="muted" TextWrapping="Wrap"
+                           Text="PHP versions run side by side; each project picks one. MariaDB versions are installed side by side with one active at a time, each with its own data." />
+            </StackPanel>
+            <Button Grid.Column="1" Content="Refresh list" Command="{Binding RefreshCommand}" VerticalAlignment="Bottom" />
+        </Grid>
+
+        <Border Classes="card">
+            <StackPanel Spacing="4">
+                <TextBlock Classes="h3" Text="PHP" />
+                <TextBlock Classes="muted" Text="The default runs localhost and every project without a version of its own." Margin="0,0,0,6" />
+                <ItemsControl ItemsSource="{Binding Php}" ItemTemplate="{StaticResource VersionRow}" />
+            </StackPanel>
+        </Border>
+
+        <Border Classes="card">
+            <StackPanel Spacing="4">
+                <TextBlock Classes="h3" Text="MariaDB" />
+                <TextBlock Classes="muted" Text="Making another version active stops the database, points it at that version's data folder (created on first use) and starts it again." TextWrapping="Wrap" Margin="0,0,0,6" />
+                <ItemsControl ItemsSource="{Binding MariaDb}" ItemTemplate="{StaticResource VersionRow}" />
+            </StackPanel>
+        </Border>
+
+        <Border Classes="card" IsVisible="{Binding Status, Converter={x:Static StringConverters.IsNotNullOrEmpty}}">
+            <TextBlock Classes="soft" Text="{Binding Status}" TextWrapping="Wrap" />
+        </Border>
+        <TextBlock Classes="muted" FontSize="13" Text="{Binding ManifestText}" />
+    </StackPanel>
+</UserControl>

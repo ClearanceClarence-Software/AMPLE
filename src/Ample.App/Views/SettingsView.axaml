@@ -1,0 +1,197 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="using:Ample.App.ViewModels"
+             x:Class="Ample.App.Views.SettingsView"
+             x:DataType="vm:SettingsViewModel">
+
+    <StackPanel Spacing="20" MaxWidth="820" HorizontalAlignment="Left">
+        <StackPanel Spacing="4">
+            <TextBlock Classes="h1" Text="Settings" />
+            <TextBlock Classes="muted" Text="Changes apply the next time a service starts." />
+        </StackPanel>
+
+        <!-- Database tool -->
+        <Border Classes="card" Padding="24">
+            <StackPanel Spacing="16">
+                <StackPanel Spacing="3">
+                    <TextBlock Classes="h2" FontSize="19" Text="Database tool" />
+                    <TextBlock Classes="muted" TextWrapping="Wrap"
+                               Text="The Open button on Overview launches the tool you pick here. You can switch any time." />
+                </StackPanel>
+                <UniformGrid Columns="2">
+                    <Button Classes="tool" Classes.selected="{Binding IsLedger}" Command="{Binding PickLedgerCommand}"
+                            HorizontalAlignment="Stretch" HorizontalContentAlignment="Stretch" Margin="0,0,6,0" Padding="16" MinHeight="0">
+                        <StackPanel Spacing="8">
+                            <Grid ColumnDefinitions="*,Auto">
+                                <TextBlock Text="Ledger" FontSize="16" FontWeight="Bold" />
+                                <Border Grid.Column="1" Classes="pill" Background="{DynamicResource AccentSoftBrush}">
+                                    <TextBlock Text="Included" Foreground="{DynamicResource AccentTextBrush}" />
+                                </Border>
+                            </Grid>
+                            <TextBlock Classes="soft" FontWeight="Normal" TextWrapping="Wrap"
+                                       Text="Modern and fast, with a smart SQL editor and inline cell editing. Built by CC Software." />
+                            <TextBlock Classes="mono muted" FontWeight="Normal" Text="localhost/ledger" />
+                        </StackPanel>
+                    </Button>
+                    <Button Classes="tool" Classes.selected="{Binding IsPhpMyAdmin}" Command="{Binding PickPhpMyAdminCommand}"
+                            HorizontalAlignment="Stretch" HorizontalContentAlignment="Stretch" Margin="6,0,0,0" Padding="16" MinHeight="0">
+                        <StackPanel Spacing="8">
+                            <Grid ColumnDefinitions="*,Auto">
+                                <TextBlock Text="phpMyAdmin" FontSize="16" FontWeight="Bold" />
+                                <Border Grid.Column="1" Classes="pill" Classes.running="{Binding IsPhpMyAdminInstalled}">
+                                    <TextBlock Text="{Binding PhpMyAdminBadge}" />
+                                </Border>
+                            </Grid>
+                            <TextBlock Classes="soft" FontWeight="Normal" TextWrapping="Wrap"
+                                       Text="The classic. Familiar if you're coming from XAMPP." />
+                            <TextBlock Classes="mono muted" FontWeight="Normal" Text="localhost/phpmyadmin" />
+                        </StackPanel>
+                    </Button>
+                </UniformGrid>
+                <Border Classes="info" IsVisible="{Binding ShowPhpMyAdminInstall}">
+                    <Grid ColumnDefinitions="*,Auto" ColumnSpacing="12">
+                        <TextBlock Classes="soft" TextWrapping="Wrap" VerticalAlignment="Center"
+                                   Text="phpMyAdmin isn't installed yet. It will be downloaded and set up for you." />
+                        <Button Grid.Column="1" Classes="primary" Content="Install phpMyAdmin" Command="{Binding InstallPhpMyAdminCommand}" />
+                    </Grid>
+                </Border>
+                <CheckBox Content="Sign in automatically with the local root account" IsChecked="{Binding AutoLogin}" />
+                <TextBlock Classes="muted" Text="{Binding ToolStatus}" IsVisible="{Binding ToolStatus, Converter={x:Static StringConverters.IsNotNullOrEmpty}}" />
+            </StackPanel>
+        </Border>
+
+        <!-- Ports -->
+        <Border Classes="card" Padding="24">
+            <StackPanel Spacing="16">
+                <Grid ColumnDefinitions="*,Auto">
+                    <StackPanel Spacing="3">
+                        <TextBlock Classes="h2" FontSize="19" Text="Ports" />
+                        <TextBlock Classes="muted" Text="Only change these if another app is already using them." />
+                    </StackPanel>
+                    <Button Grid.Column="1" Content="Find free ports" Command="{Binding FindFreePortsCommand}" VerticalAlignment="Bottom" />
+                </Grid>
+                <Grid ColumnDefinitions="*,*,*" ColumnSpacing="16">
+                    <StackPanel>
+                        <TextBlock Classes="label" Text="Web (HTTP)" />
+                        <TextBox Classes="mono" Text="{Binding HttpPort}" />
+                    </StackPanel>
+                    <StackPanel Grid.Column="1">
+                        <TextBlock Classes="label" Text="Web (HTTPS)" />
+                        <TextBox Classes="mono" Text="{Binding HttpsPort}" />
+                    </StackPanel>
+                    <StackPanel Grid.Column="2">
+                        <TextBlock Classes="label" Text="Database" />
+                        <TextBox Classes="mono" Text="{Binding MariaDbPort}" />
+                    </StackPanel>
+                </Grid>
+                <Grid ColumnDefinitions="*,Auto" ColumnSpacing="12">
+                    <TextBlock Classes="muted" Text="{Binding PortsStatus}" VerticalAlignment="Center" TextWrapping="Wrap" />
+                    <Button Grid.Column="1" Classes="primary" Content="Apply ports" Command="{Binding ApplyPortsCommand}" />
+                </Grid>
+            </StackPanel>
+        </Border>
+
+        <!-- PHP -->
+        <Border Classes="card" Padding="24">
+            <StackPanel Spacing="16">
+                <StackPanel Spacing="3">
+                    <TextBlock Classes="h2" FontSize="19" Text="PHP" />
+                    <TextBlock Classes="muted" Text="New projects use the default. Each project can pick its own version and its own php.ini." />
+                </StackPanel>
+                <Grid ColumnDefinitions="*,Auto,Auto" ColumnSpacing="12">
+                    <StackPanel>
+                        <TextBlock Classes="label" Text="Default version" />
+                        <ComboBox ItemsSource="{Binding PhpVersions}" SelectedItem="{Binding SelectedDefaultPhp}" HorizontalAlignment="Stretch" />
+                    </StackPanel>
+                    <Button Grid.Column="1" Content="Edit php.ini" Command="{Binding OpenPhpIniCommand}" VerticalAlignment="Bottom" />
+                    <Button Grid.Column="2" Content="Open folder" Command="{Binding OpenPhpFolderCommand}" VerticalAlignment="Bottom" />
+                </Grid>
+                <TextBlock Classes="muted" Text="More PHP and MariaDB versions are installed and removed on the Versions page." />
+                <TextBlock Classes="muted" Text="{Binding PhpStatus}" IsVisible="{Binding PhpStatus, Converter={x:Static StringConverters.IsNotNullOrEmpty}}" />
+            </StackPanel>
+        </Border>
+
+        <!-- Database security -->
+        <Border Classes="card" Padding="24">
+            <StackPanel Spacing="14">
+                <StackPanel Spacing="3">
+                    <TextBlock Classes="h2" FontSize="19" Text="Database security" />
+                    <TextBlock Classes="muted" Text="A root password was created for you during setup. The database only listens on this computer." />
+                </StackPanel>
+                <Grid ColumnDefinitions="*,Auto,Auto" ColumnSpacing="12">
+                    <Border Background="{DynamicResource InputBrush}" BorderBrush="{DynamicResource LineStrongBrush}" BorderThickness="1"
+                            CornerRadius="10" Padding="14,0" MinHeight="40">
+                        <TextBlock Classes="mono soft" Text="{Binding PasswordText}" VerticalAlignment="Center" />
+                    </Border>
+                    <Button Grid.Column="1" Content="{Binding RevealLabel}" Command="{Binding ToggleRevealCommand}" MinWidth="80" />
+                    <Button Grid.Column="2" Content="Copy" Click="CopyPassword_Click" />
+                </Grid>
+                <TextBlock Classes="muted" FontSize="13" TextWrapping="Wrap"
+                           Text="User root, host 127.0.0.1. Ledger signs in as admin with the same password." />
+            </StackPanel>
+        </Border>
+
+        <!-- Startup and appearance -->
+        <Border Classes="card" Padding="24">
+            <StackPanel Spacing="6">
+                <TextBlock Classes="h2" FontSize="19" Text="Startup" Margin="0,0,0,8" />
+                <CheckBox Content="Launch when Windows starts" IsChecked="{Binding LaunchAtStartup}" />
+                <CheckBox Content="Start all services when the app opens" IsChecked="{Binding StartServicesOnLaunch}" />
+                <CheckBox Content="Keep running in the system tray when the window is closed" IsChecked="{Binding KeepInTray}" />
+                <CheckBox Content="Open minimized" IsChecked="{Binding StartMinimized}" />
+            </StackPanel>
+        </Border>
+
+        <Border Classes="card" Padding="24">
+            <StackPanel Spacing="16">
+                <TextBlock Classes="h2" FontSize="19" Text="Appearance and tools" />
+                <Grid ColumnDefinitions="*,*,*" ColumnSpacing="16">
+                    <StackPanel>
+                        <TextBlock Classes="label" Text="Theme" />
+                        <ComboBox ItemsSource="{Binding Themes}" SelectedItem="{Binding SelectedTheme}" HorizontalAlignment="Stretch" />
+                    </StackPanel>
+                    <StackPanel Grid.Column="1">
+                        <TextBlock Classes="label" Text="Editor for config files" />
+                        <TextBox Text="{Binding Editor}" Watermark="Notepad" />
+                    </StackPanel>
+                    <StackPanel Grid.Column="2">
+                        <TextBlock Classes="label" Text="Browser for Open links" />
+                        <TextBox Text="{Binding Browser}" Watermark="System default" />
+                    </StackPanel>
+                </Grid>
+            </StackPanel>
+        </Border>
+
+        <!-- Maintenance -->
+        <Border Classes="card" Padding="24">
+            <StackPanel Spacing="14">
+                <StackPanel Spacing="3">
+                    <TextBlock Classes="h2" FontSize="19" Text="Maintenance" />
+                    <TextBlock Classes="muted" Text="{Binding RootFolder}" />
+                </StackPanel>
+                <WrapPanel>
+                    <Button Content="Repair stack" Command="{Binding RepairCommand}" Margin="0,0,8,8" ToolTip.Tip="Writes missing configs and installs missing components" />
+                    <Button Content="Trust certificate" Command="{Binding TrustCertificateCommand}" Margin="0,0,8,8" />
+                    <Button Content="Open AMPLE folder" Command="{Binding OpenRootCommand}" Margin="0,0,8,8" />
+                </WrapPanel>
+                <TextBlock Classes="muted" Text="{Binding MaintenanceStatus}" TextWrapping="Wrap"
+                           IsVisible="{Binding MaintenanceStatus, Converter={x:Static StringConverters.IsNotNullOrEmpty}}" />
+            </StackPanel>
+        </Border>
+
+        <!-- About -->
+        <Border Classes="card" Padding="24">
+            <StackPanel Spacing="10">
+                <TextBlock Classes="h2" FontSize="19" Text="About" />
+                <TextBlock Classes="soft" Text="{Binding VersionText}" />
+                <TextBlock Classes="mono muted" FontSize="12" Text="{Binding ComponentsText}" TextWrapping="Wrap" />
+                <TextBlock Classes="muted" FontSize="13" TextWrapping="Wrap"
+                           Text="AMPLE bundles Apache HTTP Server, mod_fcgid, PHP, MariaDB, Ledger and optionally phpMyAdmin, each under its own license. AMPLE itself is by ClearanceClarence (CC Software)." />
+                <WrapPanel>
+                    <Button Classes="ghost" Content="GitHub" Command="{Binding OpenRepositoryCommand}" />
+                    <Button Classes="ghost" Content="Third-party licenses" Command="{Binding OpenLicensesCommand}" />
+                </WrapPanel>
+            </StackPanel>
+        </Border>
+    </StackPanel>
+</UserControl>

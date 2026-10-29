@@ -1,0 +1,17 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             x:Class="Ample.App.Controls.AmpleMark"
+             Width="36" Height="36">
+    <!-- The Nodes A in the CC Software hex-well. Scales with the control's size. -->
+    <Viewbox Stretch="Uniform">
+        <Canvas Width="36" Height="36">
+            <Path Data="M18,2 L32,10 L32,26 L18,34 L4,26 L4,10 Z" Fill="#1E40AF" />
+            <Path Data="M18,7 L27.5,12.5 L27.5,23.5 L18,29 L8.5,23.5 L8.5,12.5 Z" Fill="#2A2F3A" />
+            <Path Data="M12.6,24.6 L18,11.2 L23.4,24.6 M15,20 L21,20" Stroke="#93C5FD" StrokeThickness="1.7"
+                  StrokeLineCap="Round" StrokeJoin="Round" />
+            <Ellipse Canvas.Left="16.1" Canvas.Top="9.3" Width="3.8" Height="3.8" Fill="#93C5FD" />
+            <Ellipse Canvas.Left="10.7" Canvas.Top="22.7" Width="3.8" Height="3.8" Fill="#93C5FD" />
+            <Ellipse Canvas.Left="21.5" Canvas.Top="22.7" Width="3.8" Height="3.8" Fill="#93C5FD" />
+        </Canvas>
+    </Viewbox>
+</UserControl>

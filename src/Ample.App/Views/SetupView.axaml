@@ -1,0 +1,83 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="using:Ample.App.ViewModels"
+             xmlns:controls="using:Ample.App.Controls"
+             x:Class="Ample.App.Views.SetupView"
+             x:DataType="vm:SetupViewModel">
+
+    <StackPanel Spacing="20" MaxWidth="680" HorizontalAlignment="Left">
+        <StackPanel Orientation="Horizontal" Spacing="16">
+            <controls:AmpleMark Width="56" Height="56" />
+            <StackPanel Spacing="4" VerticalAlignment="Center">
+                <TextBlock Classes="h1" Text="Welcome to AMPLE" />
+                <TextBlock Classes="muted" Text="One click installs Apache, MariaDB, PHP and Ledger into this folder." />
+            </StackPanel>
+        </StackPanel>
+
+        <!-- One card: where, the button, and the options folded away -->
+        <Border Classes="card" Padding="24" IsVisible="{Binding ShowOptions}">
+            <StackPanel Spacing="16">
+                <StackPanel Spacing="4">
+                    <TextBlock Classes="muted" FontSize="13" Text="Installs into" />
+                    <TextBlock Classes="mono accent" FontSize="15" Text="{Binding Root}" TextWrapping="Wrap" />
+                </StackPanel>
+                <Border Classes="notice" IsVisible="{Binding RootLooksTemporary}">
+                    <TextBlock Foreground="{DynamicResource WarnTextBrush}" TextWrapping="Wrap"
+                               Text="This looks like a downloads or desktop folder. Move AMPLE.exe to where the stack should live, such as C:\ample, and run it again." />
+                </Border>
+
+                <Grid ColumnDefinitions="*,Auto" ColumnSpacing="12">
+                    <TextBlock Classes="muted" Text="{Binding ManifestStatus}" TextWrapping="Wrap" VerticalAlignment="Center" />
+                    <StackPanel Grid.Column="1" Orientation="Horizontal" Spacing="8">
+                        <Button Content="Retry" Command="{Binding RetryManifestCommand}" IsVisible="{Binding !IsReady}" />
+                        <Button Classes="primary big" Content="Install AMPLE" Command="{Binding InstallCommand}" />
+                    </StackPanel>
+                </Grid>
+
+                <Expander Header="Choose what to install" IsExpanded="False" IsEnabled="{Binding IsReady}">
+                    <StackPanel Spacing="8" Margin="0,8,0,0">
+                        <TextBlock Classes="soft" Text="Apache, mod_fcgid and Ledger are always included. Versions can be added or removed later on the Versions page." TextWrapping="Wrap" />
+                        <TextBlock Classes="label" Text="PHP" Margin="0,8,0,0" />
+                        <ItemsControl ItemsSource="{Binding PhpChoices}">
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate x:DataType="vm:PhpChoiceViewModel">
+                                    <CheckBox Content="{Binding Label}" IsChecked="{Binding IsSelected}" IsEnabled="{Binding CanToggle}" />
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+                        <TextBlock Classes="label" Text="Database" Margin="0,8,0,0" />
+                        <TextBlock Classes="soft" Text="{Binding MariaDbText}" />
+                        <CheckBox Content="Also install phpMyAdmin (switchable with Ledger any time)" IsChecked="{Binding IncludePhpMyAdmin}" />
+                    </StackPanel>
+                </Expander>
+                <TextBlock Classes="muted" FontSize="13" Text="{Binding SourceText}" TextWrapping="Wrap" />
+            </StackPanel>
+        </Border>
+
+        <!-- Progress -->
+        <Border Classes="card" Padding="24" IsVisible="{Binding !ShowOptions}">
+            <StackPanel Spacing="14">
+                <TextBlock Classes="h3" FontSize="18" Text="{Binding Step}" />
+                <ProgressBar Value="{Binding Percent}" Maximum="100" IsIndeterminate="{Binding IsIndeterminate}" />
+                <TextBlock Classes="mono muted" Text="{Binding Detail}" />
+                <Border Background="{DynamicResource InputBrush}" CornerRadius="12" Padding="14,10" MaxHeight="220">
+                    <ScrollViewer>
+                        <ItemsControl ItemsSource="{Binding RecentLog}">
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate x:DataType="vm:LogEntry">
+                                    <TextBlock Classes="mono" FontSize="12" Text="{Binding Message}" TextWrapping="Wrap"
+                                               Foreground="{Binding BrushKey, Converter={x:Static vm:BrushKeyConverter.Instance}}" />
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+                    </ScrollViewer>
+                </Border>
+                <Grid ColumnDefinitions="*,Auto,Auto" ColumnSpacing="8">
+                    <TextBlock Classes="soft" Text="{Binding ResultMessage}" TextWrapping="Wrap" VerticalAlignment="Center" />
+                    <Button Grid.Column="1" Content="Cancel" Command="{Binding CancelCommand}" IsVisible="{Binding IsInstalling}" />
+                    <Button Grid.Column="2" Classes="primary big" Content="Open AMPLE" Command="{Binding FinishCommand}" IsVisible="{Binding IsDone}" />
+                </Grid>
+            </StackPanel>
+        </Border>
+    </StackPanel>
+</UserControl>

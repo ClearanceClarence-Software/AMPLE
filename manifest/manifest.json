@@ -1,0 +1,127 @@
+{
+  "schema": 1,
+  "channel": "stable",
+  "updated": "2026-10-29",
+  "minAmpleVersion": "0.1.0",
+  "components": [
+    {
+      "id": "vcredist",
+      "name": "Microsoft Visual C\u002B\u002B Redistributable",
+      "version": "14.50",
+      "url": "https://aka.ms/vs/18/release/VC_redist.x64.exe",
+      "size": 18731856,
+      "optional": false,
+      "default": false,
+      "license": "Proprietary (Microsoft)",
+      "homepage": "https://learn.microsoft.com/cpp/windows/latest-supported-vc-redist"
+    },
+    {
+      "id": "apache",
+      "name": "Apache HTTP Server",
+      "version": "2.4.66",
+      "url": "https://www.apachelounge.com/download/VS17/binaries/httpd-2.4.66-251206-win64-VS17.zip",
+      "sha256": "2cd1f349b6705e43e784e876a233eeb1a859fa6b8abc693a91f87b35a368f7f9",
+      "size": 11527838,
+      "optional": false,
+      "default": false,
+      "license": "Apache-2.0",
+      "homepage": "https://www.apachelounge.com/"
+    },
+    {
+      "id": "mod_fcgid",
+      "name": "mod_fcgid",
+      "version": "2.3.10",
+      "url": "https://www.apachelounge.com/download/VS17/modules/mod_fcgid-2.3.10-win64-VS17.zip",
+      "sha256": "cf3ded8953863c68fc522ee48f516565e67e18b180b9e5b147668c04fa5dc46d",
+      "size": 45777,
+      "optional": false,
+      "default": false,
+      "license": "Apache-2.0",
+      "homepage": "https://httpd.apache.org/mod_fcgid/"
+    },
+    {
+      "id": "php",
+      "name": "PHP",
+      "version": "8.4.27",
+      "url": "https://windows.php.net/downloads/releases/php-8.4.27-1-nts-Win32-vs17-x64.zip",
+      "sha256": "dbae154a0a89791f36c3d48e68bae797878333e7d6cb5721e74617de59b63ab7",
+      "size": 35296081,
+      "optional": false,
+      "default": true,
+      "license": "PHP-3.01",
+      "homepage": "https://windows.php.net/"
+    },
+    {
+      "id": "php",
+      "name": "PHP",
+      "version": "8.3.36",
+      "url": "https://windows.php.net/downloads/releases/php-8.3.36-1-nts-Win32-vs16-x64.zip",
+      "sha256": "1a097d52b7a68622cdc723073b61cc70caf79c941218ff65b2d8441dbc6b10d4",
+      "size": 34179998,
+      "optional": true,
+      "default": false,
+      "license": "PHP-3.01",
+      "homepage": "https://windows.php.net/"
+    },
+    {
+      "id": "php",
+      "name": "PHP",
+      "version": "8.2.35",
+      "url": "https://windows.php.net/downloads/releases/php-8.2.35-1-nts-Win32-vs16-x64.zip",
+      "sha256": "ebe75134c03869826cb1714d31fd5eb96afefa6d9fd35d786971c03020e7bce2",
+      "size": 33780725,
+      "optional": true,
+      "default": false,
+      "license": "PHP-3.01",
+      "homepage": "https://windows.php.net/"
+    },
+    {
+      "id": "mariadb",
+      "name": "MariaDB",
+      "version": "11.8.9",
+      "url": "https://archive.mariadb.org/mariadb-11.8.9/winx64-packages/mariadb-11.8.9-winx64.zip",
+      "sha256": "830c46727d9278eae212ae3eca44eeb9e71b2a68704e95f344a64fba7b1963f5",
+      "size": 97016251,
+      "optional": false,
+      "default": true,
+      "license": "GPL-2.0-only",
+      "homepage": "https://mariadb.org/"
+    },
+    {
+      "id": "mariadb",
+      "name": "MariaDB",
+      "version": "11.4.13",
+      "url": "https://archive.mariadb.org/mariadb-11.4.13/winx64-packages/mariadb-11.4.13-winx64.zip",
+      "sha256": "d62986d433eeebfde218560b276103831604a61e929e87f1a17f5aebd80257e2",
+      "size": 95024126,
+      "optional": true,
+      "default": false,
+      "license": "GPL-2.0-only",
+      "homepage": "https://mariadb.org/"
+    },
+    {
+      "id": "ledger",
+      "name": "Ledger",
+      "version": "1.1.1-beta",
+      "url": "https://github.com/ClearanceClarence-Software/Ledger/archive/refs/tags/v1.1.1-beta.zip",
+      "sha256": "309002e56ade3c7a123e7112707dada61fd4a963edb42f3d05335a2bf289bc15",
+      "size": 364806,
+      "optional": false,
+      "default": false,
+      "license": "MIT",
+      "homepage": "https://github.com/ClearanceClarence-Software/Ledger"
+    },
+    {
+      "id": "phpmyadmin",
+      "name": "phpMyAdmin",
+      "version": "5.2.3",
+      "url": "https://files.phpmyadmin.net/phpMyAdmin/5.2.3/phpMyAdmin-5.2.3-all-languages.zip",
+      "sha256": "2d2e13c735366d318425c78e4ee2cc8fc648d77faba3ddea2cd516e43885733f",
+      "size": 16431330,
+      "optional": true,
+      "default": false,
+      "license": "GPL-2.0-or-later",
+      "homepage": "https://www.phpmyadmin.net/"
+    }
+  ]
+}

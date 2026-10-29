@@ -1,0 +1,38 @@
+name: Build
+
+# Checks that every push and pull request builds cleanly and that the manifest is well-formed. Releases are
+# built, signed and uploaded on the maintainer's PC with tools/release.ps1, so this workflow never publishes.
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: actions/setup-dotnet@v6
+        with:
+          dotnet-version: 10.0.x
+
+      - name: Check formatting
+        run: dotnet format AMPLE.sln --verify-no-changes
+
+      - name: Build
+        run: dotnet build AMPLE.sln --configuration Release
+
+      - name: Check the manifest
+        shell: pwsh
+        run: |
+          $manifest = Get-Content manifest/manifest.json -Raw | ConvertFrom-Json
+          if ($manifest.schema -ne 1) { throw "Unexpected manifest schema $($manifest.schema)." }
+          $unverified = @($manifest.components | Where-Object { $_.sha256 -match '^0{64}$' })
+          if ($unverified.Count -gt 0) {
+            Write-Host "::warning::$($unverified.Count) component(s) still have placeholder checksums. Run: dotnet run --project tools/Ample.Manifest -- refresh"
+          }
+          Write-Host "Manifest $($manifest.updated): $($manifest.components.Count) components"

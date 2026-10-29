@@ -1,0 +1,20 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <!--
+    Maintainer tool for manifest/manifest.json:
+      dotnet run - - refresh    update versions from the official feeds, download each file and record its SHA-256
+      dotnet run - - verify     download every file in the manifest and check its SHA-256
+      dotnet run - - bundle DIR download every file into DIR, for the offline installer
+    (write the two dashes without the space)
+  -->
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <RootNamespace>Ample.ManifestTool</RootNamespace>
+    <AssemblyName>Ample.Manifest</AssemblyName>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\Ample.Core\Ample.Core.csproj" />
+  </ItemGroup>
+
+</Project>

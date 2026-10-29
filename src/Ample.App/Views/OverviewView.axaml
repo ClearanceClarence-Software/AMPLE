@@ -1,0 +1,193 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="using:Ample.App.ViewModels"
+             x:Class="Ample.App.Views.OverviewView"
+             x:DataType="vm:OverviewViewModel">
+
+    <UserControl.Styles>
+        <!-- Config/Logs menus: each generated MenuItem binds to a FileLink. -->
+        <Style Selector="MenuFlyoutPresenter > MenuItem" x:DataType="vm:FileLink">
+            <Setter Property="Header" Value="{Binding Label}" />
+            <Setter Property="Command" Value="{Binding OpenCommand}" />
+        </Style>
+    </UserControl.Styles>
+
+    <StackPanel Spacing="20">
+
+        <!-- Header -->
+        <Grid ColumnDefinitions="*,Auto">
+            <StackPanel Spacing="4">
+                <TextBlock Classes="h1" Text="Overview" />
+                <TextBlock Classes="muted" Text="Your local web server, PHP and database in one place." />
+            </StackPanel>
+            <StackPanel Grid.Column="1" Orientation="Horizontal" Spacing="8" VerticalAlignment="Bottom">
+                <Button Command="{Binding OpenPhpInfoCommand}" Content="{Binding PhpInfoLabel}" ToolTip.Tip="phpinfo() for the default PHP, in AMPLE's own view" />
+                <Button Command="{Binding OpenLocalhostCommand}">
+                    <StackPanel Orientation="Horizontal" Spacing="8">
+                        <TextBlock Text="Open localhost" VerticalAlignment="Center" />
+                        <Path Classes="icon" Width="14" Height="14" Data="{StaticResource IconExternal}" />
+                    </StackPanel>
+                </Button>
+            </StackPanel>
+        </Grid>
+
+        <!-- Hero -->
+        <Border Classes="card hero">
+            <Grid ColumnDefinitions="*,Auto">
+                <StackPanel Spacing="10">
+                    <Border Classes="pill" Classes.running="{Binding HeroRunning}" Classes.attention="{Binding HeroAttention}"
+                            HorizontalAlignment="Left">
+                        <StackPanel Orientation="Horizontal" Spacing="8">
+                            <Ellipse VerticalAlignment="Center" />
+                            <TextBlock Text="{Binding HeroPill}" />
+                        </StackPanel>
+                    </Border>
+                    <TextBlock Classes="h2" FontSize="26" Text="{Binding HeroTitle}" />
+                    <TextBlock Classes="muted" Text="{Binding HeroSubtitle}" TextWrapping="Wrap" />
+                </StackPanel>
+                <Button Grid.Column="1" Classes="big" Classes.primary="{Binding ToggleAllIsPrimary}"
+                        Command="{Binding ToggleAllCommand}" Content="{Binding ToggleAllLabel}"
+                        VerticalAlignment="Center" Margin="24,0,0,0" />
+            </Grid>
+        </Border>
+
+        <!-- Service cards -->
+        <ItemsControl ItemsSource="{Binding Services}">
+            <ItemsControl.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <UniformGrid Columns="2" />
+                </ItemsPanelTemplate>
+            </ItemsControl.ItemsPanel>
+            <ItemsControl.ItemTemplate>
+                <DataTemplate x:DataType="vm:ServiceViewModel">
+                    <Border Classes="card" Margin="0,0,16,0">
+                        <StackPanel Spacing="14">
+                            <Grid ColumnDefinitions="*,Auto">
+                                <StackPanel Spacing="3">
+                                    <TextBlock Classes="h3" FontSize="17" Text="{Binding Name}" />
+                                    <TextBlock Classes="mono muted" Text="{Binding Engine}" />
+                                </StackPanel>
+                                <Border Grid.Column="1" Classes="pill" Classes.running="{Binding ShowRunningPill}"
+                                        Classes.attention="{Binding ShowAttentionPill}" VerticalAlignment="Top">
+                                    <StackPanel Orientation="Horizontal" Spacing="6">
+                                        <Ellipse VerticalAlignment="Center" />
+                                        <TextBlock Text="{Binding StatusLabel}" />
+                                    </StackPanel>
+                                </Border>
+                            </Grid>
+
+                            <Border Classes="notice" IsVisible="{Binding HasConflict}">
+                                <StackPanel Spacing="10">
+                                    <TextBlock Text="{Binding ConflictText}" TextWrapping="Wrap"
+                                               Foreground="{DynamicResource WarnTextBrush}" />
+                                    <Button Classes="warn" HorizontalAlignment="Left" Command="{Binding FixPortCommand}"
+                                            Content="{Binding FixLabel}" />
+                                </StackPanel>
+                            </Border>
+
+                            <Grid ColumnDefinitions="*,Auto,Auto,Auto">
+                                <TextBlock Classes="mono soft" Text="{Binding PortsText}" VerticalAlignment="Center" />
+                                <Button Grid.Column="1" Classes="ghost" Content="Config" Margin="0,0,4,0">
+                                    <Button.Flyout>
+                                        <MenuFlyout ItemsSource="{Binding ConfigFiles}" />
+                                    </Button.Flyout>
+                                </Button>
+                                <Button Grid.Column="2" Classes="ghost" Content="Logs" Margin="0,0,8,0">
+                                    <Button.Flyout>
+                                        <MenuFlyout ItemsSource="{Binding LogFiles}" />
+                                    </Button.Flyout>
+                                </Button>
+                                <StackPanel Grid.Column="3" Orientation="Horizontal" Spacing="8">
+                                    <Button Classes="warn" Content="Force stop" Command="{Binding ForceStopCommand}"
+                                            IsVisible="{Binding ForceStopPending}" />
+                                    <Button Command="{Binding ActionCommand}" Content="{Binding ActionLabel}" MinWidth="88" />
+                                </StackPanel>
+                            </Grid>
+                        </StackPanel>
+                    </Border>
+                </DataTemplate>
+            </ItemsControl.ItemTemplate>
+        </ItemsControl>
+
+        <!-- Database tool + activity -->
+        <Grid ColumnDefinitions="*,16,*">
+            <Border Grid.Column="0" Classes="card">
+                <StackPanel Spacing="14">
+                    <StackPanel Spacing="3">
+                        <TextBlock Classes="h3" FontSize="17" Text="Database tool" />
+                        <TextBlock Classes="muted" Text="Pick which app opens when you manage your databases." TextWrapping="Wrap" />
+                    </StackPanel>
+                    <Border Classes="segment">
+                        <UniformGrid Columns="2">
+                            <Button Classes.selected="{Binding IsLedger}" Command="{Binding PickLedgerCommand}"
+                                    Content="Ledger" HorizontalAlignment="Stretch" Margin="0,0,2,0" />
+                            <Button Classes.selected="{Binding IsPhpMyAdmin}" Command="{Binding PickPhpMyAdminCommand}"
+                                    Content="phpMyAdmin" HorizontalAlignment="Stretch" Margin="2,0,0,0" />
+                        </UniformGrid>
+                    </Border>
+                    <TextBlock Classes="soft" Text="{Binding ToolDescription}" TextWrapping="Wrap" />
+                    <Grid ColumnDefinitions="*,Auto">
+                        <TextBlock Classes="mono muted" Text="{Binding ToolUrl}" VerticalAlignment="Center" />
+                        <Button Grid.Column="1" Classes="primary" Command="{Binding OpenDatabaseToolCommand}"
+                                Content="{Binding ToolOpenLabel}" IsVisible="{Binding CanOpenTool}" />
+                        <TextBlock Grid.Column="1" Classes="muted" Text="{Binding ToolHint}" IsVisible="{Binding ShowToolHint}"
+                                   VerticalAlignment="Center" />
+                    </Grid>
+                </StackPanel>
+            </Border>
+
+            <Border Grid.Column="2" Classes="card">
+                <StackPanel Spacing="12">
+                    <Grid ColumnDefinitions="*,Auto">
+                        <TextBlock Classes="h3" FontSize="17" Text="Recent activity" VerticalAlignment="Center" />
+                        <Button Grid.Column="1" Classes="ghost" Content="All logs" Command="{Binding ShowLogCommand}" />
+                    </Grid>
+                    <ItemsControl ItemsSource="{Binding Activity}">
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate x:DataType="vm:LogEntry">
+                                <Grid ColumnDefinitions="48,*" Margin="0,0,0,8">
+                                    <TextBlock Classes="mono muted" Text="{Binding ShortTime}" />
+                                    <TextBlock Grid.Column="1" Classes="soft" Text="{Binding Message}" TextWrapping="Wrap"
+                                               Foreground="{Binding BrushKey, Converter={x:Static vm:BrushKeyConverter.Instance}}" />
+                                </Grid>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                </StackPanel>
+            </Border>
+        </Grid>
+
+        <!-- Projects -->
+        <Border Classes="card">
+            <StackPanel Spacing="12">
+                <Grid ColumnDefinitions="*,Auto">
+                    <StackPanel Spacing="3">
+                        <TextBlock Classes="h3" FontSize="17" Text="Projects" />
+                        <TextBlock Classes="muted" Text="Each folder gets its own .test address with HTTPS." />
+                    </StackPanel>
+                    <Button Grid.Column="1" Content="Manage projects" Command="{Binding ShowProjectsCommand}" />
+                </Grid>
+                <TextBlock Classes="muted" IsVisible="{Binding NoProjects}" Margin="0,8,0,4"
+                           Text="No projects yet. Add a folder on the Projects page and it gets a .test address." />
+                <ItemsControl ItemsSource="{Binding Projects}" IsVisible="{Binding HasProjects}">
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate x:DataType="vm:ProjectRowViewModel">
+                            <Border BorderBrush="{DynamicResource LineBrush}" BorderThickness="0,1,0,0" Padding="0,10">
+                                <Grid ColumnDefinitions="1.2*,1.4*,0.8*,Auto" ColumnSpacing="16">
+                                    <StackPanel Spacing="2">
+                                        <TextBlock FontWeight="SemiBold" Text="{Binding Name}" />
+                                        <TextBlock Classes="mono muted" FontSize="12" Text="{Binding Folder}" TextTrimming="CharacterEllipsis" />
+                                    </StackPanel>
+                                    <TextBlock Grid.Column="1" Classes="mono accent" Text="{Binding Host}" VerticalAlignment="Center" />
+                                    <TextBlock Grid.Column="2" Classes="soft" Text="{Binding PhpLabel}" VerticalAlignment="Center" />
+                                    <Button Grid.Column="3" Classes="ghost" Content="Open" Command="{Binding OpenCommand}" />
+                                </Grid>
+                            </Border>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+            </StackPanel>
+        </Border>
+
+    </StackPanel>
+</UserControl>

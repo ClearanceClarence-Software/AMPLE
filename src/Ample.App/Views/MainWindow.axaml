@@ -1,0 +1,82 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:vm="using:Ample.App.ViewModels"
+        xmlns:controls="using:Ample.App.Controls"
+        x:Class="Ample.App.Views.MainWindow"
+        x:DataType="vm:MainViewModel"
+        Title="AMPLE"
+        Width="1180" Height="780"
+        MinWidth="920" MinHeight="620"
+        WindowStartupLocation="CenterScreen">
+
+    <Grid ColumnDefinitions="228,*">
+
+        <!-- ── Sidebar ─────────────────────────────────────────────── -->
+        <Border Grid.Column="0" Background="{DynamicResource SidebarBrush}"
+                BorderBrush="{DynamicResource LineBrush}" BorderThickness="0,0,1,0" Padding="16,22">
+            <DockPanel>
+                <StackPanel DockPanel.Dock="Top" Orientation="Horizontal" Spacing="12" Margin="8,0,8,26">
+                    <controls:AmpleMark Width="36" Height="36" />
+                    <StackPanel VerticalAlignment="Center" Spacing="1">
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="AMP" FontSize="18" FontWeight="Bold" />
+                            <TextBlock Text="L" FontSize="18" FontWeight="Bold" Classes="accent" />
+                            <TextBlock Text="E" FontSize="18" FontWeight="Bold" />
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal" Spacing="4">
+                            <TextBlock Text="CC" FontSize="12" FontWeight="SemiBold" Classes="accent" />
+                            <TextBlock Text="Software" FontSize="12" Classes="muted" />
+                        </StackPanel>
+                    </StackPanel>
+                </StackPanel>
+
+                <!-- Bottom: version -->
+                <Border DockPanel.Dock="Bottom" Background="{DynamicResource CardBrush}" CornerRadius="12" Padding="14,12">
+                    <StackPanel Spacing="2">
+                        <TextBlock Text="{Binding Version}" FontSize="13" FontWeight="SemiBold" />
+                        <TextBlock Text="Local web stack" FontSize="12" Classes="muted" />
+                    </StackPanel>
+                </Border>
+
+                <StackPanel Spacing="4" IsEnabled="{Binding !IsSetup}">
+                    <Button Classes="nav" Classes.active="{Binding IsOverview}" Command="{Binding ShowOverviewCommand}">
+                        <StackPanel Orientation="Horizontal" Spacing="12">
+                            <Path Classes="icon" Data="{StaticResource IconOverview}" />
+                            <TextBlock Text="Overview" VerticalAlignment="Center" />
+                        </StackPanel>
+                    </Button>
+                    <Button Classes="nav" Classes.active="{Binding IsProjects}" Command="{Binding ShowProjectsCommand}">
+                        <StackPanel Orientation="Horizontal" Spacing="12">
+                            <Path Classes="icon" Data="{StaticResource IconProjects}" />
+                            <TextBlock Text="Projects" VerticalAlignment="Center" />
+                        </StackPanel>
+                    </Button>
+                    <Button Classes="nav" Classes.active="{Binding IsVersions}" Command="{Binding ShowVersionsCommand}">
+                        <StackPanel Orientation="Horizontal" Spacing="12">
+                            <Path Classes="icon" Data="{StaticResource IconVersions}" />
+                            <TextBlock Text="Versions" VerticalAlignment="Center" />
+                        </StackPanel>
+                    </Button>
+                    <Button Classes="nav" Classes.active="{Binding IsLog}" Command="{Binding ShowLogCommand}">
+                        <StackPanel Orientation="Horizontal" Spacing="12">
+                            <Path Classes="icon" Data="{StaticResource IconLogs}" />
+                            <TextBlock Text="Logs" VerticalAlignment="Center" />
+                        </StackPanel>
+                    </Button>
+                    <Button Classes="nav" Classes.active="{Binding IsSettings}" Command="{Binding ShowSettingsCommand}">
+                        <StackPanel Orientation="Horizontal" Spacing="12">
+                            <Path Classes="icon" Data="{StaticResource IconSettings}" />
+                            <TextBlock Text="Settings" VerticalAlignment="Center" />
+                        </StackPanel>
+                    </Button>
+                </StackPanel>
+            </DockPanel>
+        </Border>
+
+        <!-- ── Content ─────────────────────────────────────────────── -->
+        <ScrollViewer Grid.Column="1" HorizontalScrollBarVisibility="Disabled">
+            <ContentControl Content="{Binding CurrentPage}" Margin="32,28,32,40" MaxWidth="1040"
+                            HorizontalAlignment="Stretch" />
+        </ScrollViewer>
+    </Grid>
+</Window>
